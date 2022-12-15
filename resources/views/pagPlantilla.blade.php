@@ -11,7 +11,7 @@
     <div class="container my-5">
         <a href="{{ route('xIndex') }}" class="btn btn-primary">Inicio </a>
         <a href="{{ route('xGaleria') }}" class="btn btn-primary">Galeria </a>
-        <a href="{{ route('xLista') }}" class="btn btn-primary">Lista </a>
+        <a href="{{ route('dashboard') }}" class="btn btn-primary">Lista </a>
     </div>
 
     <div class="container my-4">

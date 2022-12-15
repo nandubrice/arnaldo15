@@ -12,7 +12,7 @@ class PagesController extends Controller
     }
     public function fnLista(){
         $xAlumnos = Estudiante1::all();
-        return view ('pagLista', compact('xAlumnos'));
+        return view ('dashboard', compact('xAlumnos'));
     }
 
     public function fnEstDetalle($id){
