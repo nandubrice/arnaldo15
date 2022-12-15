@@ -15,6 +15,11 @@ use App\Http\Controllers\PagesController;
  
 Route::get('/',[PagesController::class,'fnIndex'] )->name('xIndex');
 
+Route::middleware(['auth:sanctum','verified'])->post('/2',[PagesController::class,'fnRegistrarCurso'] )->name('Curso.xRegistrarCurso');
+
+Route::middleware(['auth:sanctum','verified'])->get('/detalleCurso/{id}',[PagesController::class,'fnDetalleCurso'] )->name('Curso.xDetalleCurso');
+Route::middleware(['auth:sanctum','verified'])->get('/listaCurso',[PagesController::class,'fnListaCurso'])->name('xListaCurso');
+
 Route::middleware(['auth:sanctum','verified'])->post('/',[PagesController::class,'fnRegistrar'] )->name('Estudiante.xRegistrar');
 
 Route::middleware(['auth:sanctum','verified'])->get('/detalle/{id}',[PagesController::class,'fnEstDetalle'] )->name('Estudiante.xDetalle');
