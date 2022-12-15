@@ -3,74 +3,85 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Estudiante1;
+use App\Models\Estudiante;
+use App\Models\Curso;
 
 class PagesController extends Controller
 {
-    public function fnIndex(){
+    //PORTADA - BIENVENIDA - PARA EL PUBLICO GENERAL
+    public function  fnIndex () {
         return view('welcome');
     }
-    public function fnLista(){
-        $xAlumnos = Estudiante1::all();
-        return view ('dashboard', compact('xAlumnos'));
+
+    public function  fnEstDetalle($id) {
+        $xDetAlumnos = Estudiante::findOrFail($id);
+        return view('Estudiante.pagDetalle',compact('xDetAlumnos'));
     }
 
-    public function fnEstDetalle($id){
-        $xDetAlumnos = Estudiante1::findOrFail($id);
-        return view ('Estudiante.pagDetalle', compact('xDetAlumnos'));
+    //READ
+    public function  fnLista() {
+        $xAlumnos = Estudiante::all();
+        return view('pagLista',compact('xAlumnos'));
     }
 
-    public function fnGaleria($numero=0){
-        $valor=$numero;
-        $otro=25;
-        return view ('pagGaleria' ,compact('valor', 'otro'));
-    }
+    //////////////////// CREATE ///////////////////////////////////
     public function fnRegistrar(Request $request){
 
         //return $request->all();         //Prueba de "token" y datos recibidos
-
+    
         $request ->validate([
             'codEst' => 'required',
             'nomEst' => 'required',
             'apeEst' => 'required',
             'fnaEst' => 'required',
-            'turnMat' => 'required',
+            'turMat' => 'required',
             'semMat' => 'required',
             'estMat' => 'required'
         ]);
-
-        $nuevoEstudiante = new Estudiante1;
+    
+        $nuevoEstudiante = new Estudiante;
         $nuevoEstudiante->codEst = $request->codEst;
         $nuevoEstudiante->nomEst = $request->nomEst;
         $nuevoEstudiante->apeEst = $request->apeEst;
         $nuevoEstudiante->fnaEst = $request->fnaEst;
-        $nuevoEstudiante->turnMat = $request->turnMat;
+        $nuevoEstudiante->turMat = $request->turMat;
         $nuevoEstudiante->semMat = $request->semMat;
         $nuevoEstudiante->estMat = $request->estMat;
-        
+            
         $nuevoEstudiante->save();
-        
+            
         //$xAlumnos = Estudiante1::all();                      //Datos de BD
         //return view('pagLista', compact('xAlumnos'));        //Pasar a pagLista
         return back()->with('msj','Se registro con éxito...'); //Regresar con msj
     }
+
+    //////////////////// UPDATE ///////////////////////////////////
     public function fnEstActualizar($id){                   //Paso 1
 
-        $xActAlumnos = Estudiante1::findOrFail($id);
+        $xActAlumnos = Estudiante::findOrFail($id);
         return view('Estudiante.pagActualizar', compact('xActAlumnos'));
+    }
+
+    //////////////////// DELETE /////////////////////////////////// 
+    public function fnEliminar($id){
+        $deleteAlumno = Estudiante::findOrFail($id);
+        $deleteAlumno->delete();
+
+        return back()->with('msj','Se elimino con éxito...');  //Regresar con msj
+    
     }
 
     public function fnUpdate(Request $request, $id){        //Paso 2
 
         //return $request->all();         //Prueba de "token" y datos recibidos
 
-        $xUpdateAlumnos = Estudiante1::findOrFail($id);
+        $xUpdateAlumnos = Estudiante::findOrFail($id);
 
         $xUpdateAlumnos->codEst = $request->codEst;
         $xUpdateAlumnos->nomEst = $request->nomEst;
         $xUpdateAlumnos->apeEst = $request->apeEst;
         $xUpdateAlumnos->fnaEst = $request->fnaEst;
-        $xUpdateAlumnos->turnMat = $request->turnMat;
+        $xUpdateAlumnos->turMat = $request->turMat;
         $xUpdateAlumnos->semMat = $request->semMat;
         $xUpdateAlumnos->estMat = $request->estMat;
         
@@ -79,56 +90,65 @@ class PagesController extends Controller
         //$xAlumnos = Estudiante1::all();                        //Datos de BD
         //return view('pagLista', compact('xAlumnos'));          //Pasar a pagLista
         return back()->with('msj','Se actualizó con éxito...');  //Regresar con msj
+    } 
+  
+
+
+
+    /////////////////examen/////////////////////
+    public function  fnDetalleCurso($id) {
+        $xDetMateria = Curso::findOrFail($id);
+        return view('Curso.pagDetalleCurso',compact('xDetMateria'));
     }
 
-    //////////////////// DELETE /////////////////////////////////// 
-    public function fnEliminar(Request $request, $id){
-        $deleteAlumno = Estudiante1::findOrFail($id);
-        $deleteAlumno->delete();
-        return back()->with('msj','Se elimino con éxito');
-    
+
+    public function  fnListaCurso() {
+        $xListaCurso = Curso::all();
+        return view('pagListaCurso',compact('xListaCurso'));
     }
+   //////////////////// CREATE ///////////////////////////////////
+   public function fnRegistrarCurso(Request $request){
 
-    //CURSOS ______________________________________________________________________________
-    public function fnListaCurso(){
-        $xCursos = Curso::all();
-        return view ('pagListaCurso', compact('xCursos'));
-    }
-    
-    public function fnRegistrarCurso(Request $request){
+    //return $request->all();         //Prueba de "token" y datos recibidos
 
-        //return $request->all();         //Prueba de "token" y datos recibidos
+    $request ->validate([
+        'denCur' => 'required',
+        'hrsCur' => 'required',
+        'creCur' => 'required',
+        'plaCur' => 'required',
+        'tipCur' => 'required',
+        'estCur' => 'required'
+    ]);
 
-        $request ->validate([
-            'denCur' => 'required',
-            'hrsCur' => 'required',
-            'creCur' => 'required',
-            'plaCur' => 'required',
-            'tipCur' => 'required',
-            'estCur' => 'required'
-        ]);
-            
-        $nuevoCurso = new Curso;
-        $nuevoCurso->denCur = $request->denCur;
-        $nuevoCurso->hrsCur = $request->hrsCur;
-        $nuevoCurso->creCur = $request->creCur;
-        $nuevoCurso->plaCur = $request->plaCur;
-        $nuevoCurso->tipCur = $request->tipCur;
-        $nuevoCurso->estCur = $request->estCur;
+    $nuevoCurso = new Curso;
+    $nuevoCurso->denCur = $request->denCur;
+    $nuevoCurso->hrsCur = $request->hrsCur;
+    $nuevoCurso->creCur = $request->creCur;
+    $nuevoCurso->plaCur = $request->plaCur;
+    $nuevoCurso->tipCur = $request->tipCur;
+    $nuevoCurso->estCur = $request->estCur;
         
-        $nuevoCurso->save();
+    $nuevoCurso->save();
         
-        //$xAlumnos = Estudiante1::all();                      //Datos de BD
-        //return view('pagLista', compact('xAlumnos'));        //Pasar a pagLista
-        return back()->with('msj','Se registro el curso con éxito...'); //Regresar con msj
-    }
-    
+    //$xListaCurso = Curso::all();                      //Datos de BD
+    //return view('pagLista', compact('xListaCurso'));        //Pasar a pagLista
+    return back()->with('msj','Se registro con éxito...'); //Regresar con msj
+}
+
     public function fnEstActualizarCurso($id){                   //Paso 1
 
         $xActCurso = Curso::findOrFail($id);
         return view('Curso.pagActualizarCurso', compact('xActCurso'));
     }
 
+
+    public function fnEliminarCurso($id){
+        $deleteCurso = Curso::findOrFail($id);
+        $deleteCurso->delete();
+
+        return back()->with('msj','Se elimino con éxito...');  //Regresar con msj
+    
+    }
     public function fnUpdateCurso(Request $request, $id){        //Paso 2
 
         //return $request->all();         //Prueba de "token" y datos recibidos
@@ -147,19 +167,9 @@ class PagesController extends Controller
         //$xAlumnos = Estudiante1::all();                        //Datos de BD
         //return view('pagLista', compact('xAlumnos'));          //Pasar a pagLista
         return back()->with('msj','Se actualizó con éxito...');  //Regresar con msj
+    } 
+   public function  fnGaleria($numero=0) {
+        //return view('Foto de codigo;' .$numero);
+       return view('pagGaleria',['valor' => $numero, 'otro'=>25]);
     }
-    
-    //////////////////// DELETE /////////////////////////////////// 
-    public function fnEliminarCurso(Request $request, $id){
-        $deleteCurso = Curso::findOrFail($id);
-        $deleteCurso->delete();
-        return back()->with('msj','Se elimino el curso con éxito');
-    
-    }
-    
-    public function fnDetalleCurso($id){
-        $xDetCurso = Curso::findOrFail($id);
-        return view ('Curso.pagDetalleCurso', compact('xDetCurso'));
-    }
-    
 }
