@@ -14,10 +14,7 @@ use App\Http\Controllers\PagesController;
 //Route::get('/user/{id}', [PagesController::class,'show']);
  
 Route::get('/',[PagesController::class,'fnIndex'] )->name('xIndex');
-Route::middleware(['auth:sanctum','verified'])->name('Curso.xRegistrarCurso');
 
-RRoute::middleware(['auth:sanctum','verified'])->name('Curso.xDetalleCurso');
-Route::middleware(['auth:sanctum','verified'])->name('xListaCurso');
 Route::middleware(['auth:sanctum','verified'])->post('/',[PagesController::class,'fnRegistrar'] )->name('Estudiante.xRegistrar');
 
 Route::middleware(['auth:sanctum','verified'])->get('/detalle/{id}',[PagesController::class,'fnEstDetalle'] )->name('Estudiante.xDetalle');
